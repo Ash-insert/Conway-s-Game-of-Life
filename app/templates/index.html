@@ -13,13 +13,36 @@
     <div class="container text-align-right">
         <h1 class="display-3">Conway's Game of Life</h1>
     </div>
-    <div class="container">
+    <div class="container text-align-center">
         <div class="row"> 
-            <p class="d-inline-flex gap-1">
+            <div class="col">
                 <button type="button" class="btn btn-primary"  id="startButton">Start</button>
                 <button type="button" class="btn btn-primary"  id="stopButton">Stop</button>
                 <button type="button" class="btn btn-primary" id="randomButton">Random Fill</button>
-            </p>
+            </div>
+        </div>  
+        <div class="row row-cols-auto">
+            <div class="col">
+                <!-- <label for="ResolutionInput" class="form-label">Gride Size = <span id="ResolutionValue">20</span></label>
+                <input type="range" id="ResolutionInput" class="form-range" min="1" max="50" step="1" value="20" > -->
+                <div class="input-group mb-3">
+                    <input type="number" class="form-control" placeholder="Grid Size Resolution" id="ResolutionInput"
+                    min="5" max="30" step="1" value="20" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" id="ResolutionButton" type="button">Change Grid Size</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-auto">
+            <div class="col">
+                <label for="probabilityInput" class="form-label">Probability for random fill = <span id="probabilityValue">0.5</span></label>
+                <input type="range" id="probabilityInput" class="form-range" min="0" max="1" step="0.01" >
+            </div>
+            <div class="col">
+                <label for="framerateInput" class="form-label">Framerate (FPS) = <span id="framerateValue">30</span></label>
+                <input type="range" id="framerateInput" class="form-range" min="1" max="120" step="1" value="30" >
+            </div>
         </div>
     </div>
     

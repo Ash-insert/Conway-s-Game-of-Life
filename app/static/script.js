@@ -6,6 +6,10 @@ let simulationRunning = false;
 let startButton;
 let stopButton;
 let randomButton;
+let resolutionButton;
+let resolutionInput;
+let probabilityInput; 
+let framerateInput;
 
 function setup() {
     canvas = createCanvas(800, 600);
@@ -13,20 +17,51 @@ function setup() {
     cols = floor(width / resolution);
     rows = floor(height / resolution);
     grid = createGrid(cols, rows);
+
+    // Start Stop Simulation
     startButton = document.getElementById('startButton');
     stopButton = document.getElementById('stopButton');
-    randomButton = document.getElementById('randomButton');
     startButton.addEventListener('click', startSimulation);
     stopButton.addEventListener('click', stopSimulation);
+
+    // Random Fill
+    randomButton = document.getElementById('randomButton');
+    probabilityInput = document.getElementById('probabilityInput'); // Get the value of probability
+    probabilityInput.addEventListener('input', updateProbabilityValue);
     randomButton.addEventListener('click', randomFillGrid);
 
+    // Change the speed of the simulation
+    framerateInput = document.getElementById('framerateInput');
+    framerateInput.addEventListener('input', updateFrameRateValue);
 
+    // Change grid size
+    resolutionInput = document.getElementById('ResolutionInput');
+    resolutionButton = document.getElementById('ResolutionButton');
+    resolutionButton.addEventListener('click', updateGridSize);
+ }
+
+function updateGridSize() {
+    resolution = parseInt(resolutionInput.value);
+    cols = floor(width / resolution);
+    rows = floor(height / resolution);
+    grid = createGrid(cols, rows);
+}
+
+function updateProbabilityValue() {
+    let value = probabilityInput.value;
+    document.getElementById('probabilityValue').textContent = value; // Update span with selected value
+}
+
+function updateFrameRateValue() {
+    let value = framerateInput.value;
+    document.getElementById('framerateValue').textContent = value;
 }
 
 function draw() {
     background(51);
     drawGridLines();
     drawGrid();
+    frameRate(parseInt(framerateInput.value))
     if (simulationRunning) {
         let next = createEmptyGrid(cols, rows);
         for (let i = 0; i < cols; i++) {
@@ -117,9 +152,10 @@ function stopSimulation() {
 }
 
 function randomFillGrid() {
+    let probability = parseFloat(probabilityInput.value);
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
-            grid[i][j] = random() < 0.5 ? 1 : 0; // Randomly fill cells with 50% probability
+            grid[i][j] = random() < probability ? 1 : 0; // Randomly fill cells with 50% probability
         }
     }
 }
