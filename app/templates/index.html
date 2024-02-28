@@ -19,6 +19,7 @@
                 <button type="button" class="btn btn-primary"  id="startButton">Start</button>
                 <button type="button" class="btn btn-primary"  id="stopButton">Stop</button>
                 <button type="button" class="btn btn-primary" id="randomButton">Random Fill</button>
+                <button type="button" class="btn btn-primary" id="emptyGridButton">Empty Grid</button>
             </div>
         </div>  
         <div class="row row-cols-auto">
@@ -46,7 +47,20 @@
         </div>
     </div>
     
-    <div class="container" id="CanvasContainer" >
+    <div class="container">
+        <div class="row row-cols-auto">
+            <div class="col" id="CanvasContainer"> </div>
+            <div class="col">
+                <div class="card">
+                    <img src="" class="card-img-top" alt="Glider image">
+                    <div class="card_body">
+                        <h5 class="card-title">Glider Lifeform</h5>
+                        <p class="card-text">The Glider is a small spaceship that moves diagonally across the grid.</p>
+                        <button type="button" id="loadGliderButton" class="btn btn-primary">Load Glider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

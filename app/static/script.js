@@ -10,6 +10,8 @@ let resolutionButton;
 let resolutionInput;
 let probabilityInput; 
 let framerateInput;
+let loadGliderButton;
+let emptyGridButton;
 
 function setup() {
     canvas = createCanvas(800, 600);
@@ -38,7 +40,19 @@ function setup() {
     resolutionInput = document.getElementById('ResolutionInput');
     resolutionButton = document.getElementById('ResolutionButton');
     resolutionButton.addEventListener('click', updateGridSize);
+
+    // Load Glider
+    loadGliderButton = document.getElementById('loadGliderButton');
+    loadGliderButton.addEventListener('click', LoadGlider);
+
+    // Empty Grid
+    emptyGridButton = document.getElementById('emptyGridButton');
+    emptyGridButton.addEventListener('click', emptyGrid);
  }
+
+function emptyGrid() {
+    grid = createEmptyGrid(cols, rows);
+}
 
 function updateGridSize() {
     resolution = parseInt(resolutionInput.value);
@@ -156,6 +170,21 @@ function randomFillGrid() {
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
             grid[i][j] = random() < probability ? 1 : 0; // Randomly fill cells with 50% probability
+        }
+    }
+}
+
+function LoadGlider() {
+    let gliderPattern = [
+        [0, 1, 0],
+        [0, 0, 1],
+        [1, 1, 1]
+    ];
+    let startX = floor(cols/2) - 1;
+    let startY = floor(rows/2) - 1;
+    for (let i=0 ; i < gliderPattern.length; i++ ) {
+        for (let j=0; j < gliderPattern[i].length; j++) {
+            grid[startX + i][startY + j] = gliderPattern[i][j];
         }
     }
 }
