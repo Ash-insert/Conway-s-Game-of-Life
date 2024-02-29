@@ -1,7 +1,7 @@
 let grid;
 let cols;
 let rows;
-let resolution = 20;
+let resolution = 15;
 let simulationRunning = false;
 let startButton;
 let stopButton;
@@ -10,8 +10,9 @@ let resolutionButton;
 let resolutionInput;
 let probabilityInput; 
 let framerateInput;
-let loadGliderButton;
+let selectPattern;
 let emptyGridButton;
+let loadPattern;
 
 function setup() {
     canvas = createCanvas(800, 600);
@@ -41,9 +42,10 @@ function setup() {
     resolutionButton = document.getElementById('ResolutionButton');
     resolutionButton.addEventListener('click', updateGridSize);
 
-    // Load Glider
-    loadGliderButton = document.getElementById('loadGliderButton');
-    loadGliderButton.addEventListener('click', LoadGlider);
+    // Select and Load pattern
+    selectPattern = document.getElementById('SelectPattern');
+    loadPattern = document.getElementById('LoadPattern');
+    loadPattern.addEventListener('click', LoadPattern);
 
     // Empty Grid
     emptyGridButton = document.getElementById('emptyGridButton');
@@ -174,18 +176,129 @@ function randomFillGrid() {
     }
 }
 
-function LoadGlider() {
+function createPulsar() {
+    let pulsarPattern = Array(13);
+    let pulsarRow1 = [0, 0, 1, 1, 1, 0, 0, 0, 1 ,1, 1, 0, 0];
+    let pulsarRow2 = [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1];
+    pulsarPattern[0] = pulsarRow1;
+    pulsarPattern[1] = Array(13).fill(0);
+    pulsarPattern[2] = pulsarRow2;
+    pulsarPattern[3] = pulsarRow2;
+    pulsarPattern[4] = pulsarRow2;
+    pulsarPattern[5] = pulsarRow1;
+    pulsarPattern[6] = Array(13).fill(0);
+    pulsarPattern[7] = pulsarRow1;
+    pulsarPattern[8] = pulsarRow2;
+    pulsarPattern[9] = pulsarRow2;
+    pulsarPattern[10] = pulsarRow2;
+    pulsarPattern[11] = Array(13).fill(0);
+    pulsarPattern[12] = pulsarRow1;
+    return pulsarPattern;
+}
+
+function LoadPattern() {
     let gliderPattern = [
         [0, 1, 0],
         [0, 0, 1],
         [1, 1, 1]
     ];
-    let startX = floor(cols/2) - 1;
-    let startY = floor(rows/2) - 1;
-    for (let i=0 ; i < gliderPattern.length; i++ ) {
-        for (let j=0; j < gliderPattern[i].length; j++) {
-            grid[startX + i][startY + j] = gliderPattern[i][j];
+    let toadPattern = [
+        [0, 0, 0, 0],
+        [0, 1, 1, 1],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+    ];
+    let beaconPattern = [
+        [1, 1, 0, 0],
+        [1, 1, 0, 0],
+        [0, 0, 1, 1],
+        [0, 0, 1, 1]
+    ];
+    let  pentaDecathlon = [
+        [1, 1, 1, 1, 1, 1, 1, 1] ,
+        [1, 0, 1, 1, 1, 1, 0, 1] ,
+        [1, 1, 1, 1, 1, 1, 1, 1] 
+    ];
+    let LWSS =  [
+        [0, 1, 0, 0, 1],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 0]
+    ];
+    let MWSS = [
+        [1, 1, 1, 0, 0],
+        [1, 0, 0, 1, 0],
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0],
+        [0, 1, 0, 1, 0]
+    ];
+    let HWSS = [
+        [0, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 1, 0],
+        [0, 0, 1, 1, 0, 0, 0]
+    ];
+    let Rpentomino = [
+        [0, 1, 1],
+        [1, 1, 0],
+        [0, 1, 0]
+    ];
+    let Diehard = [
+        [0, 1, 0],
+        [1, 1, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+        [1, 0, 0],
+        [1, 0, 1],
+        [1, 0, 0]
+    ];
+    let Acorn = [
+        [0, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0],
+        [1, 1, 0, 0, 1, 1, 1]
+    ];
+    let BLSE = [
+        [0, 0, 0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0, 1, 1],
+        [0, 0, 0, 0, 1, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0],
+        [1, 0, 1, 0, 0, 0, 0, 0]
+    ];
+    let pulsarPattern = createPulsar();
+    
+    var dict = {
+        'Glider' : gliderPattern,
+        'Toad' : toadPattern,
+        'Pulsar' : pulsarPattern,
+        'Beacon' : beaconPattern,
+        'Penta-Decathlon' : pentaDecathlon,
+        'LWSS' : LWSS,
+        'MWSS' : MWSS,
+        'HWSS' : HWSS,
+        'R-pentomino' : Rpentomino,
+        'Diehard' : Diehard,
+        'Acron' : Acorn,
+        'BLSE' : BLSE
+    }
+
+    if (selectPattern.value == 'Select Pattern') {
+        alert('Please select a pattern.')
+    }
+    else {
+        let Pattern = dict[selectPattern.value];
+
+        let startX = floor(cols/2) - floor(Pattern.length/2);
+        let startY = floor(rows/2) - floor(Pattern[0].length/2);
+    
+        for (let i=0 ; i < Pattern.length; i++ ) {
+            for (let j=0; j < Pattern[i].length; j++) {
+                grid[startX + i][startY + j] = Pattern[i][j];
+            }
         }
     }
 }
- 
+

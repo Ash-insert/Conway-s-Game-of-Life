@@ -28,11 +28,31 @@
                 <input type="range" id="ResolutionInput" class="form-range" min="1" max="50" step="1" value="20" > -->
                 <div class="input-group mb-3">
                     <input type="number" class="form-control" placeholder="Grid Size Resolution" id="ResolutionInput"
-                    min="5" max="30" step="1" value="20" aria-describedby="basic-addon2">
+                    min="5" max="30" step="1" value="15" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary" id="ResolutionButton" type="button">Change Grid Size</button>
                     </div>
                 </div>
+            </div>
+            <div class="col">
+                <select class="form-select" aria-label="Default select example" id="SelectPattern">
+                    <option selected>Select Pattern</option>
+                    <option value="Glider">Glider</option>
+                    <option value="Toad">Toad</option>
+                    <option value="Pulsar">Pulsar</option>
+                    <option value="Beacon">Beacon</option>
+                    <option value="Penta-Decathlon">Penta-Decathlon</option>
+                    <option value="LWSS">LWSS</option>
+                    <option value="MWSS">MWSS</option>
+                    <option value="HWSS">HWSS</option>
+                    <option value="R-pentomino">R-pentomino</option>
+                    <option value="Diehard">Diehard</option>
+                    <option value="Acron">Acron</option>
+                    <option value="BLSE">BLSE</option>
+                </select>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" id="LoadPattern">Load Pattern</button>
             </div>
         </div>
         <div class="row row-cols-auto">
@@ -41,8 +61,8 @@
                 <input type="range" id="probabilityInput" class="form-range" min="0" max="1" step="0.01" >
             </div>
             <div class="col">
-                <label for="framerateInput" class="form-label">Framerate (FPS) = <span id="framerateValue">30</span></label>
-                <input type="range" id="framerateInput" class="form-range" min="1" max="120" step="1" value="30" >
+                <label for="framerateInput" class="form-label">Framerate (FPS) = <span id="framerateValue">20</span></label>
+                <input type="range" id="framerateInput" class="form-range" min="1" max="120" step="1" value="20" >
             </div>
         </div>
     </div>
