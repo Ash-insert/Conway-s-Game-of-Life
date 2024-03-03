@@ -14,7 +14,7 @@
         <h1 class="display-3">Conway's Game of Life</h1>
     </div>
     <div class="container text-align-center">
-        <div class="row"> 
+        <div class="row row-cols-auto mb-3" id="buttons"> 
             <div class="col">
                 <button type="button" class="btn btn-primary"  id="startButton">Start</button>
                 <button type="button" class="btn btn-primary"  id="stopButton">Stop</button>
@@ -22,37 +22,37 @@
                 <button type="button" class="btn btn-primary" id="emptyGridButton">Empty Grid</button>
             </div>
         </div>  
-        <div class="row row-cols-auto">
+        <div class="row row-cols-auto mb-3" id="Grid size change">
             <div class="col">
-                <!-- <label for="ResolutionInput" class="form-label">Gride Size = <span id="ResolutionValue">20</span></label>
-                <input type="range" id="ResolutionInput" class="form-range" min="1" max="50" step="1" value="20" > -->
-                <div class="input-group mb-3">
-                    <input type="number" class="form-control" placeholder="Grid Size Resolution" id="ResolutionInput"
+                <div class="input-group">
+                    <input type="number" class="form-control" id="ResolutionInput"
                     min="5" max="30" step="1" value="15" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary" id="ResolutionButton" type="button">Change Grid Size</button>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <select class="form-select" aria-label="Default select example" id="SelectPattern">
-                    <option selected>Select Pattern</option>
-                    <option value="Glider">Glider</option>
-                    <option value="Toad">Toad</option>
-                    <option value="Pulsar">Pulsar</option>
-                    <option value="Beacon">Beacon</option>
-                    <option value="Penta-Decathlon">Penta-Decathlon</option>
-                    <option value="LWSS">LWSS</option>
-                    <option value="MWSS">MWSS</option>
-                    <option value="HWSS">HWSS</option>
-                    <option value="R-pentomino">R-pentomino</option>
-                    <option value="Diehard">Diehard</option>
-                    <option value="Acron">Acron</option>
-                    <option value="BLSE">BLSE</option>
-                </select>
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-primary" id="LoadPattern">Load Pattern</button>
+            <div class="col" >
+                <div class="input-group">
+                    <select class="form-select" aria-label="Default select example" id="SelectPattern">
+                        <option selected>Select Pattern</option>
+                        <option value="Glider">Glider</option>
+                        <option value="Toad">Toad</option>
+                        <option value="Pulsar">Pulsar</option>
+                        <option value="Beacon">Beacon</option>
+                        <option value="Penta-Decathlon">Penta-Decathlon</option>
+                        <option value="LWSS">LWSS</option>
+                        <option value="MWSS">MWSS</option>
+                        <option value="HWSS">HWSS</option>
+                        <option value="R-pentomino">R-pentomino</option>
+                        <option value="Diehard">Diehard</option>
+                        <option value="Acron">Acron</option>
+                        <option value="BLSE">BLSE</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary" id="LoadPattern">Load Pattern</button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row row-cols-auto">
@@ -82,6 +82,47 @@
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <div class="mb-3">
+                    <label for="UsernameInput" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="UsernameInput">
+                </div>
+                <div class="mb-3">
+                    <label for="PatternNameInput" class="form-label">Pattern Name</label>
+                    <input type="text" class="form-control" id="PatternNameInput" placeholder="DhasuPattern">
+                </div>
+                <div class="mb-3">
+                    <label for="PatternDetails" class="form-label">Your observations about pattern</label>
+                    <textarea id="PatternDetails" rows="5" class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary" id="SavePatternButton">Save Pattern</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="Saved Patterns">
+        <div class="row row-cols-auto">
+            <div class="col">
+                {% for pattern in patterns %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Pattern Details</h5>
+                        <p class="card-text"><strong>Username:</strong> {{ pattern.username }}</p>
+                        <p class="card-text"><strong>Pattern Name:</strong> {{ pattern.pattern_name }}</p>
+                        <p class="card-text"><strong>Pattern Details:</strong> {{ pattern.pattern_details }}</p>
+                        <button type="button" class="btn btn-primary" onclick="loadSavedPattern('{{ pattern.grid_data }}')">Load Pattern</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

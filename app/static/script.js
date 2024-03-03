@@ -13,6 +13,7 @@ let framerateInput;
 let selectPattern;
 let emptyGridButton;
 let loadPattern;
+let savePatternButton;
 
 function setup() {
     canvas = createCanvas(800, 600);
@@ -50,6 +51,10 @@ function setup() {
     // Empty Grid
     emptyGridButton = document.getElementById('emptyGridButton');
     emptyGridButton.addEventListener('click', emptyGrid);
+
+    //Save Pattern
+    savePatternButton = document.getElementById('SavePatternButton');
+    savePatternButton.addEventListener('click', savePattern);
  }
 
 function emptyGrid() {
@@ -302,3 +307,69 @@ function LoadPattern() {
     }
 }
 
+function savePattern(){
+    const usernameInput = document.getElementById('UsernameInput').value;
+    const patternNameInput = document.getElementById('PatternNameInput').value;
+    const patternDetails = document.getElementById('PatternDetails').value;
+
+    if (simulationRunning == true) {
+        alert('Stop the simulation before saving.')
+        return;
+    }
+    
+    //extract data
+    const gridData = extractGridData();
+    
+    // options for fetch 
+    const options = {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify( {
+            username : usernameInput,
+            patternName : patternNameInput,
+            patternDetails : patternDetails,
+            gridData : gridData
+        }
+        )
+    };
+    
+    //Send data to server (route "save-pattern")using fetch method
+    fetch('/save-pattern', options)
+    .then(Response => {
+        if (Response.ok) {
+            alert("Pattern Saved Succesfully.");
+        }
+        else {
+            alert("Failed to save the pattern.");
+        }
+    })
+
+    .catch( error => {
+        console.error('Error saving pattern:', error);
+        alert("An error occured while saving pattern");
+    });  
+}
+
+// Function to extract grid data
+function extractGridData() {
+    const gridData = [];
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (grid[i][j] === 1) { 
+                gridData.push({ x: i, y: j }); // Store position of live cell
+            }
+        }
+    }
+    return gridData;
+}
+
+function loadSavedPattern(gridData){
+    alert("loading grid data");
+}
+
+function dummy()
+{
+    alert("dummy function is working");
+}
