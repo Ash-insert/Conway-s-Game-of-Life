@@ -12,4 +12,4 @@ class Pattern(db.Model):
     __table_args__ = (UniqueConstraint('pattern_name', name='unique_pattern_name_constraint'),)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return f"<User: {self.username}>, <Pattern Name: {self.pattern_name}>" 

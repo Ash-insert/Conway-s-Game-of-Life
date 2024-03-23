@@ -3,38 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conway's Game of Life</title>
+    <title>Life's Little Playground</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.dom.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #212529; /* Light gray background */
+            padding-top: 20px;
+        }
+        .container {
+            margin-bottom: 20px;
+        }
+        .card {
+            border: 1px solid #dee2e6; /* Gray border */
+            border-radius: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+            transition: box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .card:hover {
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Slight increase in shadow on hover */
+        }
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .card-text {
+            color: #6c757d; /* Gray text */
+        }
+        .btn {
+            margin-right: 10px;
+            transition: transform 0.2s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05); /* Increase size on hover */
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da; /* Light gray border */
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container text-align-right">
-        <h1 class="display-3">Conway's Game of Life</h1>
-    </div>
-    <div class="container text-align-center">
-        <div class="row row-cols-auto mb-3" id="buttons"> 
-            <div class="col">
+    <div class="container bg-dark text-white">
+        <h1 class="display-3 text-center mb-5">Life's Little Playground</h1>
+        <p class="lead">The Life's Little Playground web app lets you dive into Conway's Game of Life right from your browser.
+            You can tinker with the grid by clicking on the grid cells, watch it come alive, and see what crazy patterns emerge. You can select from 
+            various predefined patterns. Also if you found your own cool pattern you can save it and look at what others have created. 
+            </p>
+    
+        <!-- Control Buttons --> 
+        <div class="row justify-content-center mb-4"> 
+            <div class="col-auto">
                 <button type="button" class="btn btn-primary"  id="startButton">Start</button>
                 <button type="button" class="btn btn-primary"  id="stopButton">Stop</button>
-                <button type="button" class="btn btn-primary" id="randomButton">Random Fill</button>
+                <button type="button" class="btn btn-primary" id="randomButton">Randomly Populate Grid</button>
                 <button type="button" class="btn btn-primary" id="emptyGridButton">Empty Grid</button>
             </div>
         </div>  
-        <div class="row row-cols-auto mb-3" id="Grid size change">
-            <div class="col">
+
+        <!-- Grid Size and Pattern Selection -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-4">
                 <div class="input-group">
                     <input type="number" class="form-control" id="ResolutionInput"
-                    min="5" max="30" step="1" value="15" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary" id="ResolutionButton" type="button">Change Grid Size</button>
-                    </div>
+                    min="5" max="30" step="1" value="15">
+                    <button class="btn btn-primary" id="ResolutionButton" type="button">Change Cell Size</button>
                 </div>
             </div>
-            <div class="col" >
+            <div class="col-md-4" >
                 <div class="input-group">
-                    <select class="form-select" aria-label="Default select example" id="SelectPattern">
+                    <select class="form-select" id="SelectPattern">
                         <option selected>Select Pattern</option>
                         <option value="Glider">Glider</option>
                         <option value="Toad">Toad</option>
@@ -49,76 +93,76 @@
                         <option value="Acron">Acron</option>
                         <option value="BLSE">BLSE</option>
                     </select>
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-primary" id="LoadPattern">Load Pattern</button>
-                    </div>
+                    <button type="button" class="btn btn-primary" id="LoadPattern">Load Pattern</button>    
                 </div>
             </div>
         </div>
-        <div class="row row-cols-auto">
-            <div class="col">
-                <label for="probabilityInput" class="form-label">Probability for random fill = <span id="probabilityValue">0.5</span></label>
+
+        <!-- Probability and Framerate Input -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-4">
+                <label for="probabilityInput" class="form-label">Cell Population Probability: <span id="probabilityValue">0.5</span></label>
                 <input type="range" id="probabilityInput" class="form-range" min="0" max="1" step="0.01" >
             </div>
-            <div class="col">
-                <label for="framerateInput" class="form-label">Framerate (FPS) = <span id="framerateValue">20</span></label>
+            <div class="col-md-4">
+                <label for="framerateInput" class="form-label">Simulation Speed (FPS) = <span id="framerateValue">20</span></label>
                 <input type="range" id="framerateInput" class="form-range" min="1" max="120" step="1" value="20" >
             </div>
         </div>
-    </div>
     
-    <div class="container">
-        <div class="row row-cols-auto">
-            <div class="col" id="CanvasContainer"> </div>
-            <div class="col">
-                <div class="card">
-                    <img src="" class="card-img-top" alt="Glider image">
-                    <div class="card_body">
-                        <h5 class="card-title">Glider Lifeform</h5>
-                        <p class="card-text">The Glider is a small spaceship that moves diagonally across the grid.</p>
-                        <button type="button" id="loadGliderButton" class="btn btn-primary">Load Glider</button>
-                    </div>
-                </div>
-            </div>
+        <!-- Canvas Container -->
+        <div class="row justify-content-center">
+            <div class="col-xl text-center" id="CanvasContainer"> </div>
         </div>
-    </div>
-
-    <div class="container">
+        
+        <!-- Description of Conway's Game of Life -->
         <div class="row">
-            <div class="col-5">
-                <div class="mb-3">
-                    <label for="UsernameInput" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="UsernameInput">
-                </div>
-                <div class="mb-3">
-                    <label for="PatternNameInput" class="form-label">Pattern Name</label>
-                    <input type="text" class="form-control" id="PatternNameInput" placeholder="DhasuPattern">
-                </div>
-                <div class="mb-3">
-                    <label for="PatternDetails" class="form-label">Your observations about pattern</label>
-                    <textarea id="PatternDetails" rows="5" class="form-control"></textarea>
-                </div>
-                <div class="mb-3">
-                    <button type="button" class="btn btn-primary" id="SavePatternButton">Save Pattern</button>
-                </div>
+            <h2 class="mt-5">About Conway's Game of Life</h2>
+            <p>Conway's Game of Life, devised by the British mathematician John Horton Conway in 1970, is a classic example of a cellular automaton.</p>
+            <p>Governed by a simple set of rules, this zero-player game unfolds on an infinite two-dimensional grid, consisting of cells that can be either alive or dead.
+                The game's evolution is determined solely by the initial configuration of these cells and the application of its rules. 
+                Check out the <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#">wikipedia page</a> for more information.</p>    
+        </div>
+
+        <!-- Save Pattern Form -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <form id="SavePatternForm">
+                    <div class="mb-3">
+                        <label for="UsernameInput" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="UsernameInput" placeholder="Your name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="PatternNameInput" class="form-label">Pattern Name</label>
+                        <input type="text" class="form-control" id="PatternNameInput" placeholder="Enter pattern name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="PatternDetails" class="form-label">Your observations about pattern</label>
+                        <textarea id="PatternDetails" rows="5" class="form-control" placeholder="Enter observations about the pattern"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="SavePatternButton">Save Pattern</button>     
+                </form>
             </div>
         </div>
-    </div>
 
-    <div class="container" id="Saved Patterns">
-        <div class="row row-cols-auto">
-            <div class="col">
+        <!-- Saved Patterns -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="mb-3">Saved Patterns</h2>
+                <div id="SavedPatternContainer">
                 {% for pattern in patterns %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Pattern Details</h5>
-                        <p class="card-text"><strong>Username:</strong> {{ pattern.username }}</p>
-                        <p class="card-text"><strong>Pattern Name:</strong> {{ pattern.pattern_name }}</p>
-                        <p class="card-text"><strong>Pattern Details:</strong> {{ pattern.pattern_details }}</p>
-                        <button type="button" class="btn btn-primary" onclick="loadSavedPattern('{{ pattern.grid_data }}')">Load Pattern</button>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Pattern Details</h5>
+                            <p class="card-text"><strong>Username:</strong> {{ pattern.username }}</p>
+                            <p class="card-text"><strong>Pattern Name:</strong> {{ pattern.pattern_name }}</p>
+                            <p class="card-text"><strong>Pattern Details:</strong> {{ pattern.pattern_details }}</p>
+                            <button type="button" class="btn btn-primary" onclick="loadSavedPattern('{{ pattern.grid_data }}')">Load Pattern</button>
+                            <a href="{{ url_for('delete_pattern', id=pattern.id ) }}" class="btn btn-danger">Delete Pattern</a>
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
+               </div>
             </div>
         </div>
     </div>
@@ -128,3 +172,14 @@
      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
+
+<!-- <div class="col">
+    <div class="card">
+        <img src="" class="card-img-top" alt="Glider image">
+        <div class="card_body">
+            <h5 class="card-title">Glider Lifeform</h5>
+            <p class="card-text">The Glider is a small spaceship that moves diagonally across the grid.</p>
+            <button type="button" id="loadGliderButton" class="btn btn-primary">Load Glider</button>
+        </div>
+    </div>
+</div> -->

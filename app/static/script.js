@@ -14,9 +14,9 @@ let selectPattern;
 let emptyGridButton;
 let loadPattern;
 let savePatternButton;
-
+// color palette https://colorhunt.co/palette/ffe6e6e1afd1ad88c67469b6
 function setup() {
-    canvas = createCanvas(800, 600);
+    canvas = createCanvas( 1200, 600);
     canvas.parent('CanvasContainer'); // This sets the parent element for the canvas
     cols = floor(width / resolution);
     rows = floor(height / resolution);
@@ -55,6 +55,7 @@ function setup() {
     //Save Pattern
     savePatternButton = document.getElementById('SavePatternButton');
     savePatternButton.addEventListener('click', savePattern);
+
  }
 
 function emptyGrid() {
@@ -79,7 +80,8 @@ function updateFrameRateValue() {
 }
 
 function draw() {
-    background(51);
+    // Background Color
+    background(255, 230, 230);
     drawGridLines();
     drawGrid();
     frameRate(parseInt(framerateInput.value))
@@ -90,7 +92,7 @@ function draw() {
                 let state = grid[i][j];
                 let neighbors = countNeighbors(grid, i, j);
                 if (state == 0 && neighbors == 3) {
-                    next[i][j] = 1;
+                    next[i][j] = 1 ;
                 } else if (state == 1 && (neighbors < 2 || neighbors > 3)) {
                     next[i][j] = 0;
                 } else {
@@ -113,10 +115,11 @@ function mousePressed() {
 function drawGridLines() {
     for (let i=0; i<width; i+=resolution) {
         for(let j=0; j<height; j+=resolution) {
-            stroke(0)
-            strokeWeight(1)
-            line(i, 0, i, height)
-            line(0, j, width, j)
+            // stroke color
+            stroke(116, 105, 182);
+            strokeWeight(1);
+            line(i, 0, i, height);
+            line(0, j, width, j);
         }
     }
 }
@@ -127,7 +130,8 @@ function drawGrid() {
             let x = i * resolution;
             let y = j * resolution;
             if (grid[i][j] == 1) {
-                fill(0,100,0);
+                // box color
+                fill(116, 105, 182);
                 stroke(255);
                 rect(x, y, resolution - 1, resolution - 1);
             }
@@ -146,7 +150,7 @@ function createGrid(cols, rows) {
 function createEmptyGrid(cols, rows) {
     let grid = new Array(cols);
     for (let i = 0; i < cols; i++) {
-        grid[i] = new Array(rows).fill(0);
+        grid[i] = new Array(rows).fill(0); 
     }
     return grid;
 }
@@ -157,7 +161,7 @@ function countNeighbors(grid, x, y) {
         for (let j = -1; j < 2; j++) {
             let col = (x + i + cols) % cols;
             let row = (y + j + rows) % rows;
-            sum += grid[col][row];
+            sum += grid[col][row];   
         }
     }
     sum -= grid[x][y];
@@ -355,8 +359,8 @@ function savePattern(){
 // Function to extract grid data
 function extractGridData() {
     const gridData = [];
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
             if (grid[i][j] === 1) { 
                 gridData.push({ x: i, y: j }); // Store position of live cell
             }
@@ -366,7 +370,10 @@ function extractGridData() {
 }
 
 function loadSavedPattern(gridData){
-    alert("loading grid data");
+    let parsedData = JSON.parse(gridData);
+    for (let i=0; i<parsedData.length; i++) {
+        grid[parsedData[i]['x']][parsedData[i]['y']] = 1;
+    }
 }
 
 function dummy()
